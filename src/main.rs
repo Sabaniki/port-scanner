@@ -12,8 +12,5 @@ use crate::util::packet::ScanType;
 fn main() {
     env::set_var("RUST_LOG", "debug");
     env_logger::init();
-    let arg = match util::app::get_scan_type() {
-        Ok(ok) => ok,
-        Err(e) => panic!("{}", e)
-    };
+    let arg = util::app::get_scan_type();
 }
