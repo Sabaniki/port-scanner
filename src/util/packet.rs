@@ -1,5 +1,5 @@
 use std::net::Ipv4Addr;
-use pnet::packet::tcp::{self, MutableTcpPacket, TcpFlags};
+use pnet::packet::tcp::{TcpFlags};
 
 pub struct PacketInfo {
     my_ip_address: Ipv4Addr,

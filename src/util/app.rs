@@ -1,7 +1,7 @@
 use clap::{ArgMatches, App, Arg, ArgGroup};
 use super::packet;
-use pnet::packet::tcp::{self, MutableTcpPacket, TcpFlags};
-use log;
+
+
 
 fn create_arg() -> ArgMatches {
     App::new("simple port scan application")
