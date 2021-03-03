@@ -1,10 +1,10 @@
 use clap::{ArgMatches, App, Arg, ArgGroup};
 use anyhow::Context;
+use super::packet;
 use pnet::packet::tcp::{self, MutableTcpPacket, TcpFlags};
+use log;
 
-
-
-fn create_app() -> ArgMatches {
+fn create_arg() -> ArgMatches {
     App::new("simple port scan application")
         .version("1.0.0")
         .author("sabaniki")
@@ -14,19 +14,23 @@ fn create_app() -> ArgMatches {
         .arg(Arg::new("xmas"))
         .arg(Arg::new("null"))
         .group(
-            ArgGroup::new("methods")
+            ArgGroup::new("scan_type")
                 .args(&["syn", "fin", "xmas", "null"])
                 .required(true)
         )
         .get_matches()
 }
 
-pub fn get_arg() -> Result<String, anyhow::Error> {
-    let app = create_app();
-    let method_name = app.value_of("methods")
-        .with_context(||"could not get the arg [methods]")?;
-    Ok(method_name.to_string())
-    // let interface_name = app.value_of("interface_name")
-    //     .with_context(||"could not get the arg [interface_name]")?;
-    // Ok(interface_name.to_string())
+pub fn get_scan_type() -> Result<packet::ScanType, anyhow::Error> {
+    let app = create_arg();
+    let method_name = app.value_of("scan_type")
+        .with_context(||"could not get the arg [scan_type]")?;
+    let scan_type = match method_name {
+        "syn" => packet::ScanType::Syn,
+        "fin" => packet::ScanType::Fin,
+        "xmas" => packet::ScanType::Xmas,
+        "null" => packet::ScanType::Null,
+        _ => Err("cannot opt for such a method.")
+    };
+    Ok(scan_type)
 }
