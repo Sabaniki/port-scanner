@@ -2,7 +2,6 @@ use clap::{ArgMatches, App, Arg, ArgGroup};
 use super::packet;
 
 
-
 fn create_arg() -> ArgMatches {
     App::new("simple port scan application")
         .version("1.0.0")
