@@ -56,7 +56,7 @@ fn get_target_ip_address(arg_matches: &ArgMatches) -> Ipv4Addr {
         .unwrap_or_else(|_|
             print_and_exit(
                 format!(
-                    "given argument [{}] cold not be translated into an ipv4 address",
+                    "given argument [{}] is invalid ipv4 address",
                     raw
                 ).as_str()
             )
@@ -74,7 +74,7 @@ fn get_scan_type(arg_matches: &ArgMatches) -> packet::ScanType {
         "xmas" => packet::ScanType::Xmas,
         "null" => packet::ScanType::Null,
         _ => print_and_exit(
-            format!("'{}' is invalid scan type", method_name).as_str()
+            format!("given argument [{}] is invalid scan type", method_name).as_str()
         )
     }
 }
