@@ -46,14 +46,14 @@ fn get_env() -> anyhow::Result<(Ipv4Addr, u16, u16)> {
         .to_string();
     let my_ip_address =
         Ipv4Addr::from_str(my_ip_address_str.as_str())
-            .unwrap_or_else(|e| print_and_exit(
-                format!("{}", e).as_str()
+            .unwrap_or_else(|_| print_and_exit(
+                format!("in env.yml, [{}] is invalid ipv4 address", my_ip_address_str).as_str()
             ));
     let my_port = doc["my_port"].as_i64()
-        .unwrap_or_else(|| print_and_exit("could not the element 'my_port'"))
+        .unwrap_or_else(|| print_and_exit("'my_port' is not defined in env.yml"))
         as u16;
     let maximum_port = doc["maximum_port_num"].as_i64()
-        .unwrap_or_else(|| print_and_exit("could not the element 'maximum_port_num'"))
+        .unwrap_or_else(|| print_and_exit("'maximum_port_num' is not defined in env.yml"))
         as u16;
     Ok((my_ip_address, my_port, maximum_port))
 }
