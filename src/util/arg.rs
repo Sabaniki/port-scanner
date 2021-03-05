@@ -2,6 +2,9 @@ use clap::{ArgMatches, App, Arg, ArgGroup};
 use crate::packet;
 use std::net::Ipv4Addr;
 use std::str::FromStr;
+use crate::util::error::print_and_exit;
+use std::process::exit;
+use log::error;
 
 pub struct Args {
     pub target_ip_address: Ipv4Addr,
@@ -47,12 +50,15 @@ fn create_arg() -> ArgMatches {
 fn get_target_ip_address(arg_matches: &ArgMatches) -> Ipv4Addr {
     let raw = arg_matches.value_of("target_ip_address")
         .unwrap_or_else(||
-            panic!("could not get the arg[target_ip_address]")
+            panic!("could not get the arg [target_ip_address]")
         );
     let parsed = Ipv4Addr::from_str(raw)
         .unwrap_or_else(|_|
-            panic!(
-                format!("The given argument [{}] cold not be translated into an ipv4 address", raw)
+            print_and_exit(
+                format!(
+                    "The given argument [{}] cold not be translated into an ipv4 address",
+                    raw
+                ).as_str()
             )
         );
     parsed
@@ -67,6 +73,6 @@ fn get_scan_type(arg_matches: &ArgMatches) -> packet::ScanType {
         "fin" => packet::ScanType::Fin,
         "xmas" => packet::ScanType::Xmas,
         "null" => packet::ScanType::Null,
-        _ => panic!(format!("cannot opt for such a scan type '{}'", method_name))
+        _ => print_and_exit("could not the element 'my_ip_address'")
     }
 }
