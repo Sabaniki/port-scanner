@@ -1,5 +1,5 @@
 use clap::{ArgMatches, App, Arg, ArgGroup};
-use crate::packet;
+use crate::network::packet;
 use std::net::Ipv4Addr;
 use std::str::FromStr;
 use crate::util::error::print_and_exit;

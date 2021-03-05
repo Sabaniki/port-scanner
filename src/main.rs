@@ -1,11 +1,11 @@
 mod util;
-mod packet;
+mod network;
 
 #[macro_use]
 extern crate log;
 
 use std::env;
-use packet::PacketInfo;
+use network::packet::PacketInfo;
 use crate::util::arg::Args;
 use crate::util::env::Env;
 use pnet::transport::{
