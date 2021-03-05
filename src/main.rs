@@ -20,4 +20,5 @@ fn main() {
         maximum_port: env.maximum_port,
         scan_type: args.scan_type
     };
+    println!("{}", packet_info.target_ip_address);
 }
