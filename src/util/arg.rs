@@ -51,7 +51,9 @@ fn get_target_ip_address(arg_matches: &ArgMatches) -> Ipv4Addr {
         );
     let parsed = Ipv4Addr::from_str(raw)
         .unwrap_or_else(|_|
-            panic!("The argument given cannot be translated into an ipv4 address")
+            panic!(
+                format!("The given argument [{}] cold not be translated into an ipv4 address", raw)
+            )
         );
     parsed
 }
@@ -65,6 +67,6 @@ fn get_scan_type(arg_matches: &ArgMatches) -> packet::ScanType {
         "fin" => packet::ScanType::Fin,
         "xmas" => packet::ScanType::Xmas,
         "null" => packet::ScanType::Null,
-        _ => panic!("cannot opt for such a method.")
+        _ => panic!(format!("cannot opt for such a scan type '{}'", method_name))
     }
 }
