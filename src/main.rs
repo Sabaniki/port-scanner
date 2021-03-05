@@ -17,19 +17,13 @@ use pnet::transport::{
 };
 use pnet::packet::ip::IpNextHeaderProtocols;
 use crate::util::error::print_and_exit;
-use env_logger::Builder;
-use log::LevelFilter;
-use std::io::Write;
+use crate::util::logger;
 
 fn main() {
     env::set_var("RUST_LOG", "debug");
-    let mut builder = Builder::from_default_env();
 
-    builder
-        .format(|buf, record|
-            writeln!(buf, "\x1b[{}m{}\x1b[m: {}", 31, record.level(), record.args())
-        )
-        .init();
+    let mut logger = logger::create_colored_logger();
+    logger.init();
 
     let args = Args::new();
     let env = Env::new();
