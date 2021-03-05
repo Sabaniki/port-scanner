@@ -1,5 +1,5 @@
 use clap::{ArgMatches, App, Arg, ArgGroup};
-use super::packet;
+use crate::packet;
 use std::net::Ipv4Addr;
 use std::str::FromStr;
 

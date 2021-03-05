@@ -1,10 +1,11 @@
 mod util;
+mod packet;
 
 #[macro_use]
 extern crate log;
 
 use std::env;
-use crate::util::packet::PacketInfo;
+use packet::PacketInfo;
 use crate::util::arg::Args;
 use crate::util::env::Env;
 
