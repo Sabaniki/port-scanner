@@ -28,7 +28,7 @@ fn create_arg() -> ArgMatches {
         .arg(
             Arg::new("target_ip_address")
                 .about("specify target_ip_address")
-                .value_name("target_ip_address")
+                .value_name("target for port scan")
                 .index(1)
                 .required(true)
         )

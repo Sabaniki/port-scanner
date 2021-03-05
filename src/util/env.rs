@@ -11,6 +11,7 @@ pub struct Env {
     pub my_port: u16,
     pub maximum_port: u16,
 }
+
 impl Env {
     pub fn new() -> Self {
         let (my_ip_address, my_port, maximum_port) = get_env()
@@ -18,7 +19,7 @@ impl Env {
         Env {
             my_ip_address,
             my_port,
-            maximum_port
+            maximum_port,
         }
     }
 }
