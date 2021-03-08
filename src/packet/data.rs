@@ -10,6 +10,7 @@ pub struct PacketInfo {
 }
 
 // Copyが実装されているので、代入などの際にデフォルトでコピーが生成される
+// ただし巨大なものにCopyを実装するとオーバーヘッドになるらしい
 // enumは要素にpubいらない
 #[derive(Copy, Clone)]
 pub enum ScanType {

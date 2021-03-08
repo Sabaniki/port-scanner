@@ -12,10 +12,11 @@ pub fn build_packet(packet_info: &PacketInfo) -> [u8; TCP_SIZE] {
     tcp_header.set_source(packet_info.my_port);
 
     // オプションを含まないため20オクテットまでがTCPヘッダ。
-    // 4オクテット単位で指定するため引数は5。
-    // オプションやコントロールフラグについて忘れたら
-    // https://www.infraexpert.com/study/tcpip8.html を参照
+    // 4オクテット単位で指定するためオフセットに与える引数は5。
+    // オプションやコントロールフラグについて忘れたら、
+    // https://www.infraexpert.com/study/tcpip8.html を参照。
     tcp_header.set_data_offset(5);
+    // ちなみにPacketInfoがCopyトレイトを実装していないとここでCannot moveエラーが起きる
     tcp_header.set_flags(packet_info.scan_type as u16);
 
     // チェックサムを計算して設定
@@ -37,8 +38,8 @@ pub fn rewrite_destination_port(
 ) {
     tcp_header.set_destination(target);
 
-    // TCPヘッダの中身をいじったので
-    // チェックサムを計算し直さなければならない
+    // TCPヘッダの中身をいじったので、
+    // チェックサムを計算し直さなければならない。
     let checksum = tcp::ipv4_checksum(
         &tcp_header.to_immutable(),
         &packet_info.my_ip_address,

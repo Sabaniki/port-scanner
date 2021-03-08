@@ -13,4 +13,4 @@ maximum_port_num: 1023
 ```
 実行時は
 `sudo port-scanner <target for port scan> <syn|fin|xmas|null>`として、ターゲットのIPv4アドレスを指定し、スキャン方法を4種類の中から選択してください。
-`port-scanner <--help | -h>`でヘルプが見られます。
+`port-scanner <--help|-h>`でヘルプが見られます。
