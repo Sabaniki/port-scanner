@@ -1,5 +1,5 @@
 use clap::{ArgMatches, App, Arg, ArgGroup};
-use crate::network::packet;
+use crate::packet;
 use std::net::Ipv4Addr;
 use std::str::FromStr;
 use crate::util::error::print_and_exit;
@@ -8,7 +8,7 @@ use log::error;
 
 pub struct Args {
     pub target_ip_address: Ipv4Addr,
-    pub scan_type: packet::ScanType,
+    pub scan_type: packet::data::ScanType,
 }
 
 impl Args {
@@ -65,15 +65,15 @@ fn get_target_ip_address(arg_matches: &ArgMatches) -> Ipv4Addr {
     parsed
 }
 
-fn get_scan_type(arg_matches: &ArgMatches) -> packet::ScanType {
+fn get_scan_type(arg_matches: &ArgMatches) -> packet::data::ScanType {
     let method_name = arg_matches.value_of("scan_type").unwrap_or_else(||
         panic!("could not get the arg [scan_type]")
     );
     match method_name {
-        "syn" => packet::ScanType::Syn,
-        "fin" => packet::ScanType::Fin,
-        "xmas" => packet::ScanType::Xmas,
-        "null" => packet::ScanType::Null,
+        "syn" => packet::data::ScanType::Syn,
+        "fin" => packet::data::ScanType::Fin,
+        "xmas" => packet::data::ScanType::Xmas,
+        "null" => packet::data::ScanType::Null,
         _ => print_and_exit(
             format!("given argument [{}] is invalid scan type", method_name).as_str()
         )
