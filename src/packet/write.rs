@@ -17,6 +17,8 @@ pub fn build_packet(packet_info: &PacketInfo) -> [u8; TCP_SIZE] {
     // https://www.infraexpert.com/study/tcpip8.html を参照
     tcp_header.set_data_offset(5);
     tcp_header.set_flags(packet_info.scan_type as u16);
+
+    // チェックサムを計算して設定
     let checksum = tcp::ipv4_checksum(
         &tcp_header.to_immutable(),
         &packet_info.my_ip_address,
