@@ -1,5 +1,5 @@
 use env_logger::{Builder, fmt::Color};
-use log::{LevelFilter, Level};
+use log::{Level};
 use std::io::Write;
 
 pub fn create_colored_logger() -> Builder {

@@ -1,6 +1,5 @@
 use crate::packet::data::PacketInfo;
-use pnet::packet::tcp::{self, MutableTcpPacket, TcpFlags};
-use pnet::packet::MutablePacket;
+use pnet::packet::tcp::{self, MutableTcpPacket};
 
 const TCP_SIZE: usize = 20;
 

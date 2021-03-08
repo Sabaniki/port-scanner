@@ -2,8 +2,6 @@ use clap::{ArgMatches, App, Arg, ArgGroup};
 use crate::packet;
 use std::net::Ipv4Addr;
 use std::str::FromStr;
-use std::process::exit;
-use log::error;
 use anyhow::anyhow;
 
 pub struct Args {

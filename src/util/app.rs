@@ -10,8 +10,6 @@ use pnet::transport::{
     self,
     TransportChannelType,
     TransportProtocol,
-    TransportReceiver,
-    TransportSender,
 };
 use pnet::packet::ip::IpNextHeaderProtocols;
 use crate::util::logger;
