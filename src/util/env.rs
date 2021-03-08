@@ -36,14 +36,19 @@ fn get_from_file() -> Result<String, anyhow::Error> {
 }
 
 fn get_env() -> anyhow::Result<(Ipv4Addr, u16, u16)> {
+    // ファイルの中身取ってきてyamlに変換
+    // get_from_fileに&が必要な理由がよくわからない(コンパイラに従っった)
     let source = &get_from_file()? as &str;
     let docs = YamlLoader::load_from_str(source)?;
     let doc = &docs[0];
+
+    // 丁寧にyamlから環境変数取ってくる
     let my_ip_address_str = doc["my_ip_address"].as_str()
         .unwrap_or_else(||
             print_and_exit("could not the element 'my_ip_address'")
         )
         .to_string();
+    // そのうちipv6にも対応させたい気持ちあり
     let my_ip_address =
         Ipv4Addr::from_str(my_ip_address_str.as_str())
             .unwrap_or_else(|_| print_and_exit(

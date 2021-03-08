@@ -24,6 +24,7 @@ impl Args {
 }
 
 fn create_arg() -> ArgMatches {
+    // index番号をちゃんと振らないとパニック起こすのが落とし穴
     App::new("simple port scan application")
         .version("1.0.0")
         .author("sabaniki")

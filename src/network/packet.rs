@@ -9,6 +9,8 @@ pub struct PacketInfo {
     pub scan_type: ScanType,
 }
 
+// Copyが実装されているので、代入などの際にデフォルトでコピーが生成される
+// enumは要素にpubいらない
 #[derive(Copy, Clone)]
 pub enum ScanType {
     Syn = TcpFlags::SYN as isize,
