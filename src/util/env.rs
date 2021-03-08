@@ -7,7 +7,7 @@ use std::net::Ipv4Addr;
 use std::str::FromStr;
 use log::error;
 use std::process::exit;
-use crate::util::error::print_and_exit;
+use anyhow::anyhow;
 
 pub struct Env {
     pub my_ip_address: Ipv4Addr,
@@ -16,16 +16,15 @@ pub struct Env {
 }
 
 impl Env {
-    pub fn new() -> Self {
+    pub fn new() -> anyhow::Result<Self> {
         let (my_ip_address, my_port, maximum_port) =
-            get_env().unwrap_or_else(|e| print_and_exit(
-                format!("{}", e).as_str()
-            ));
-        Env {
+            get_env()?;
+        let env = Env {
             my_ip_address,
             my_port,
             maximum_port,
-        }
+        };
+        Ok(env)
     }
 }
 
@@ -44,21 +43,17 @@ fn get_env() -> anyhow::Result<(Ipv4Addr, u16, u16)> {
 
     // 丁寧にyamlから環境変数取ってくる
     let my_ip_address_str = doc["my_ip_address"].as_str()
-        .unwrap_or_else(||
-            print_and_exit("could not the element 'my_ip_address'")
-        )
+        .ok_or_else(|| anyhow!("'my_ip_address' is not defined in env.yml"))?
         .to_string();
     // そのうちipv6にも対応させたい気持ちあり
     let my_ip_address =
         Ipv4Addr::from_str(my_ip_address_str.as_str())
-            .unwrap_or_else(|_| print_and_exit(
-                format!("in env.yml, [{}] is invalid ipv4 address", my_ip_address_str).as_str()
-            ));
+            .with_context(|| format!("in env.yml, [{}] is invalid ipv4 address", my_ip_address_str))?;
     let my_port = doc["my_port"].as_i64()
-        .unwrap_or_else(|| print_and_exit("'my_port' is not defined in env.yml"))
+        .ok_or_else(|| anyhow!("'my_port' is not defined in env.yml"))?
         as u16;
     let maximum_port = doc["maximum_port_num"].as_i64()
-        .unwrap_or_else(|| print_and_exit("'maximum_port_num' is not defined in env.yml"))
+        .ok_or_else(|| anyhow!("'maximum_port_num' is not defined in env.yml"))?
         as u16;
     Ok((my_ip_address, my_port, maximum_port))
 }

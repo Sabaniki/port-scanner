@@ -14,7 +14,6 @@ use pnet::transport::{
     TransportSender,
 };
 use pnet::packet::ip::IpNextHeaderProtocols;
-use crate::util::error::print_and_exit;
 use crate::util::logger;
 use crate::packet::data::PacketInfo;
 
@@ -25,7 +24,7 @@ pub fn run() -> anyhow::Result<()> {
     logger.init();
 
     let args = Args::new()?;
-    let env = Env::new();
+    let env = Env::new()?;
     let packet_info = PacketInfo {
         my_ip_address: env.my_ip_address,
         target_ip_address: args.target_ip_address,
@@ -38,7 +37,7 @@ pub fn run() -> anyhow::Result<()> {
     let (mut sender, mut receiver) = transport::transport_channel(
         1024,
         TransportChannelType::Layer4(TransportProtocol::Ipv4(IpNextHeaderProtocols::Tcp)),
-    ).unwrap_or_else(|e| print_and_exit(format!("{}", e).as_str()));
+    )?;
     Ok(())
 
     // パケットの送信と受信を並列に行う
