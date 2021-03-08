@@ -1,12 +1,13 @@
 use crate::packet::data::PacketInfo;
 use pnet::packet::tcp::{self, MutableTcpPacket, TcpFlags};
-const TCP_SIZE:usize = 20;
+
+const TCP_SIZE: usize = 20;
 
 // パケットを作成する
 pub fn build_packet(packet_info: &PacketInfo) -> [u8; TCP_SIZE] {
     // 0u8: 符号なし8bit整数としての0
     let mut tcp_buffer = [0u8; TCP_SIZE];
-    let mut tcp_header = MutableTcppacket::new(&mut tcp_buffer[..]).unwrap();
+    let mut tcp_header = MutableTcpPacket::new(&mut tcp_buffer[..]).unwrap();
     tcp_header.set_source(packet_info.my_port);
 
     // オプションを含まないため20オクテットまでがTCPヘッダ。
@@ -24,3 +25,4 @@ pub fn build_packet(packet_info: &PacketInfo) -> [u8; TCP_SIZE] {
 
     tcp_buffer
 }
+
