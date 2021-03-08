@@ -37,7 +37,7 @@ fn get_from_file() -> Result<String, anyhow::Error> {
 
 fn get_env() -> anyhow::Result<(Ipv4Addr, u16, u16)> {
     // ファイルの中身取ってきてyamlに変換
-    // get_from_fileに&が必要な理由がよくわからない(コンパイラに従っった)
+    // get_from_fileに&が必要な理由がよくわからない(コンパイラに従った)
     let source = &get_from_file()? as &str;
     let docs = YamlLoader::load_from_str(source)?;
     let doc = &docs[0];

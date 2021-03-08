@@ -1,5 +1,6 @@
 use crate::packet::data::PacketInfo;
 use pnet::packet::tcp::{self, MutableTcpPacket, TcpFlags};
+use pnet::packet::MutablePacket;
 
 const TCP_SIZE: usize = 20;
 
@@ -26,3 +27,20 @@ pub fn build_packet(packet_info: &PacketInfo) -> [u8; TCP_SIZE] {
     tcp_buffer
 }
 
+// TCPヘッダの宛先ポート情報を書き換える。
+pub fn rewrite_destination_port(
+    target: u16,
+    tcp_header: &mut MutableTcpPacket,
+    packet_info: &PacketInfo,
+) {
+    tcp_header.set_destination(target);
+
+    // TCPヘッダの中身をいじったので
+    // チェックサムを計算し直さなければならない
+    let checksum = tcp::ipv4_checksum(
+        &tcp_header.to_immutable(),
+        &packet_info.my_ip_address,
+        &packet_info.target_ip_address,
+    );
+    tcp_header.set_checksum(checksum);
+}
