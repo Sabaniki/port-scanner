@@ -5,6 +5,7 @@ use std::str::FromStr;
 use crate::util::error::print_and_exit;
 use std::process::exit;
 use log::error;
+use anyhow::anyhow;
 
 pub struct Args {
     pub target_ip_address: Ipv4Addr,
@@ -12,14 +13,15 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn new() -> Self {
+    pub fn new() -> anyhow::Result<Self> {
         let app = create_arg();
-        let target_ip_address = get_target_ip_address(&app);
-        let scan_type = get_scan_type(&app);
-        Args {
+        let target_ip_address = get_target_ip_address(&app)?;
+        let scan_type = get_scan_type(&app)?;
+        let args = Args {
             target_ip_address,
             scan_type,
-        }
+        };
+        Ok(args)
     }
 }
 
@@ -48,34 +50,23 @@ fn create_arg() -> ArgMatches {
         .get_matches()
 }
 
-fn get_target_ip_address(arg_matches: &ArgMatches) -> Ipv4Addr {
+fn get_target_ip_address(arg_matches: &ArgMatches) -> anyhow::Result<Ipv4Addr> {
     let raw = arg_matches.value_of("target_ip_address")
-        .unwrap_or_else(||
-            panic!("could not get the arg [target_ip_address]")
-        );
-    let parsed = Ipv4Addr::from_str(raw)
-        .unwrap_or_else(|_|
-            print_and_exit(
-                format!(
-                    "given argument [{}] is invalid ipv4 address",
-                    raw
-                ).as_str()
-            )
-        );
-    parsed
+        .ok_or_else(|| anyhow!("could not get the arg [target_ip_address]"))?;
+    let parsed = Ipv4Addr::from_str(raw)?;
+    Ok(parsed)
 }
 
-fn get_scan_type(arg_matches: &ArgMatches) -> packet::data::ScanType {
-    let method_name = arg_matches.value_of("scan_type").unwrap_or_else(||
-        panic!("could not get the arg [scan_type]")
-    );
+fn get_scan_type(arg_matches: &ArgMatches) -> anyhow::Result<packet::data::ScanType> {
+    let method_name = arg_matches.value_of("scan_type")
+        .ok_or_else(||
+            anyhow!("could not get the arg [scan_type]")
+        )?;
     match method_name {
-        "syn" => packet::data::ScanType::Syn,
-        "fin" => packet::data::ScanType::Fin,
-        "xmas" => packet::data::ScanType::Xmas,
-        "null" => packet::data::ScanType::Null,
-        _ => print_and_exit(
-            format!("given argument [{}] is invalid scan type", method_name).as_str()
-        )
+        "syn" => Ok(packet::data::ScanType::Syn),
+        "fin" => Ok(packet::data::ScanType::Fin),
+        "xmas" => Ok(packet::data::ScanType::Xmas),
+        "null" => Ok(packet::data::ScanType::Null),
+        _ => Err(anyhow!("given argument [{}] is invalid scan type", method_name)),
     }
 }
