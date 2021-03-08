@@ -17,6 +17,7 @@ use pnet::packet::ip::IpNextHeaderProtocols;
 use crate::util::logger;
 use crate::packet::data::PacketInfo;
 
+// 最終的にerror!で出力しないとロガーのカラースキームが適用されないのでrun()でラップした
 pub fn run() -> anyhow::Result<()> {
     env::set_var("RUST_LOG", "debug");
 
@@ -38,11 +39,11 @@ pub fn run() -> anyhow::Result<()> {
         1024,
         TransportChannelType::Layer4(TransportProtocol::Ipv4(IpNextHeaderProtocols::Tcp)),
     )?;
-    Ok(())
 
     // パケットの送信と受信を並列に行う
     // rayon::join(
     //     // TODO: send_packet(&mut sender, &packet_info),
     //     // TODO: receive_packets(&mut receive, &packet_info),
     // );
+    Ok(())
 }
